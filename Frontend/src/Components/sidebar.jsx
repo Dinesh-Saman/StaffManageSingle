@@ -12,7 +12,9 @@ import {
   FaClipboardCheck,
   FaFileAlt,
   FaCaretDown,
-  FaCaretUp
+  FaCaretUp,
+  FaPlusSquare,
+  FaUtensils,
 } from 'react-icons/fa';
 import logo from '../Images/logo.png'; // Adjust the path if needed
 
@@ -140,6 +142,41 @@ const Sidebar = () => {
               <MenuItem>
                 <Icon><FaFileAlt /></Icon>
                 Leave Report
+              </MenuItem>
+            </Link>
+          </ExpandableMenu>
+        )}
+      </Menu>
+
+            {/* Menu Management Section */}
+            <Menu>
+        <MenuSectionTitle onClick={() => setMenuManagementOpen(!isMenuManagementOpen)}>
+          Menu Management {isMenuManagementOpen ? <FaCaretUp /> : <FaCaretDown />}
+        </MenuSectionTitle>
+        {isMenuManagementOpen && (
+          <ExpandableMenu>
+            <Link to="/menu" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem>
+                <Icon><FaTachometerAlt /></Icon>
+                Dashboard
+              </MenuItem>
+            </Link>
+            <Link to="/view-menu" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem>
+                <Icon><FaUtensils /></Icon>
+                View Menu
+              </MenuItem>
+            </Link>
+            <Link to="/add-menu" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem>
+                <Icon><FaPlusSquare /></Icon>
+                Add Menu
+              </MenuItem>
+            </Link>
+            <Link to="/menu-report" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem>
+                <Icon><FaChartBar /></Icon>
+                Menu Report
               </MenuItem>
             </Link>
           </ExpandableMenu>

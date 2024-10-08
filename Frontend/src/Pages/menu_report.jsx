@@ -214,7 +214,7 @@ const MenuReportPage = () => {
               </Typography>
           </Box>
           <Box mt={4}>
-            <Button variant="contained" color="secondary" onClick={handleDownload}>
+            <Button variant="contained" color="secondary" onClick={handleDownload} style={{marginBottom:'15px'}}>
               Download PDF
             </Button>
           </Box>

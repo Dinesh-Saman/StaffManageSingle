@@ -1,8 +1,8 @@
 // controllers/menuController.js
 const Menu = require("../models/menuModel");
-const mongoose = require('mongoose'); // Import mongoose for ObjectId validation
+const mongoose = require('mongoose'); 
+const nodemailer = require('nodemailer');
 
-// Add a new menu item and send an email notification
 exports.addNewMenuItem = async (req, res) => {
   try {
       const { menuItemId, menuItemName, category, price, preparationTime, servingSize, menuImage } = req.body;
@@ -42,6 +42,15 @@ exports.addNewMenuItem = async (req, res) => {
       });
 
       await newMenuItem.save();
+
+        // Define and initialize the transporter using your email service credentials
+        const transporter = nodemailer.createTransport({
+          service: 'gmail', // Replace with the correct service provider (Gmail is an example)
+          auth: {
+              user: process.env.EMAIL_FROM, // Your email (ensure it's set in environment variables)
+              pass: process.env.EMAIL_PASS  // Your email password (or app-specific password)
+          }
+      });
 
       // Send email notification after successfully adding the menu item
       const mailOptions = {

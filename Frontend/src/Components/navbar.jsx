@@ -15,7 +15,7 @@ const Header = () => {
   }
 
   return (
-    <Box className="header">
+    <Box >
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, MenuItem, FormControl, Select, InputLabel, Box, Typography, FormHelperText } from '@material-ui/core';
 import Sidebar from '../Components/sidebar';
 import Header from '../Components/customer_header'; 
@@ -15,6 +15,16 @@ const AddMenu = () => {
   const [servingSize, setServingSize] = useState('');
   const [menuImage, setMenuImage] = useState('');
   const [errors, setErrors] = useState({});
+
+    // Auto-generate the menu item ID when the component loads
+    useEffect(() => {
+      generateMenuItemId();
+    }, []);
+  
+    const generateMenuItemId = () => {
+      const id = `MENU-${Math.floor(Math.random() * 100000)}`;
+      setMenuItemId(id);
+    };
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
@@ -83,7 +93,6 @@ const AddMenu = () => {
     try {
       await axios.post('http://localhost:3002/menu/add-menu-item', newMenuItem);
       swal("Success", "New menu item added successfully!", "success");
-      setMenuItemId('');
       setMenuItemName('');
       setCategory('');
       setPrice('');
@@ -135,9 +144,9 @@ const AddMenu = () => {
                   label="Menu Item ID"
                   variant="outlined"
                   value={menuItemId}
-                  onChange={handleMenuItemIdChange}
                   helperText={errors.menuItemId}
                   error={!!errors.menuItemId}
+                  disabled
                 />
                 <TextField
                   fullWidth

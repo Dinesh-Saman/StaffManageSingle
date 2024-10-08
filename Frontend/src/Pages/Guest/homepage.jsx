@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, IconButton } from '@material-ui/core';
+import { Button, IconButton, Select } from '@material-ui/core';
 import { AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from 'react-icons/ai';
 import Modal from 'react-modal';
 import Header from '../../Components/customer_header';
@@ -8,7 +8,6 @@ import MainHeader from '../../Components/navbar';
 import Swal from 'sweetalert2';
 
 const HomePageContainer = styled.div`
-  padding: 20px;
   flex-direction: column;
   align-items: center;
   background-color: #f0f2f5;
@@ -143,7 +142,8 @@ const OrderButton = styled(Button)`
 `;
 
 const OrderMainButton = styled(Button)`
-margin-top: 60px;
+margin-top: 50px;
+margin-bottom: 15px;
 width: 150%;
 background-color: ${(props) => (props.ordered ? '#d4ac0d' : '#4CAF50')};
 color: #fff;
@@ -344,6 +344,22 @@ const HomePage = () => {
   const [ordersPlaced, setOrdersPlaced] = useState(false);
   const [currentPopup, setCurrentPopup] = useState('payment'); 
   const [previousPopup, setPreviousPopup] = useState(null); 
+  const [servingSizes, setServingSizes] = useState({});
+
+
+  const handleServingSizeChange = (menuItemId, value) => {
+    if (!menuItemId) {
+      console.error('Menu Item ID is undefined');
+      return; // Early exit if menuItemId is not valid
+    }
+    
+    // Update your state or perform actions as needed
+    setServingSizes((prevSizes) => ({
+      ...prevSizes,
+      [menuItemId]: value, // Ensure that you update the state correctly
+    }));
+  };
+  
 
   // Payment form states
   const [cardType, setCardType] = useState('');
@@ -480,7 +496,6 @@ const HomePage = () => {
       setPreviousPopup(null); 
     }
   };
-  
 
   return (
     <>
@@ -505,6 +520,33 @@ const HomePage = () => {
                 <MenuCard key={item.menuItemId}>
                   <MenuItemImage src={item.menuImage} alt={item.menuItemName} />
                   <MenuItemName>{item.servingSize} {item.menuItemName}</MenuItemName>
+                      {/* Dropdown for serving size */}
+                      <FormField style={{ alignItems: 'center',  display: 'flex', }}>
+                      <FormLabel htmlFor={`servingSize-${item.menuItemId}`} style={{ marginRight: '10px', fontSize:'18px', marginTop:'4px'}}>
+                        Portion
+                      </FormLabel>
+                      <Select
+                        style={{
+                          cursor: 'pointer', 
+                          backgroundColor: '#fff', 
+                          color: '#333',
+                          width: '100%', 
+                          fontSize: '16px',
+                          appearance: 'none',
+                          backgroundPosition: 'right 10px center',
+                          backgroundSize: '1em' 
+                        }}
+                        id={`servingSize-${item.menuItemId}`}
+                        value={servingSizes[item.menuItemId] || 'Medium'} 
+                        onChange={(e) => handleServingSizeChange(item.menuItemId, e.target.value)} // Pass the correct values
+                      >
+                        <option style={{ cursor: 'pointer', padding: '8px' }} value="Small">Small</option>
+                        <option style={{ cursor: 'pointer', padding: '8px' }} value="Medium">Medium</option>
+                        <option style={{ cursor: 'pointer', padding: '8px' }} value="Large">Large</option>
+                      </Select>
+
+                    </FormField>
+
                   <MenuItemDescription>{item.menuItemDescription}</MenuItemDescription>
                   <MenuItemPrice>Rs {item.price}</MenuItemPrice>
                   <QuantityContainer>

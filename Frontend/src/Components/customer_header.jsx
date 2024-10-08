@@ -16,7 +16,8 @@ function Header() {
                 <img src={logo} alt="Hotel Breeta's Garden" className="header-logo" />
 
                 <div className="header-links">
-                    <a href="/home">Home</a>
+                    <a href="/">Home</a>
+                    <a href="/home">Menu</a>
                     <a href="/bookings">Bookings</a>
                     <a href="/reviews">Reviews</a>
                     <a href="/services">Services</a>
