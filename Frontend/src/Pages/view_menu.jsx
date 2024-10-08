@@ -90,7 +90,7 @@ const ViewMenu = () => {
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/menu/get-menu-items');
+        const response = await axios.get('http://localhost:3001/menu/get-menu-items');
         setMenuData(response.data);
       } catch (error) {
         console.error('There was an error fetching the menu data!', error);
@@ -109,7 +109,7 @@ const ViewMenu = () => {
   // Delete a menu item
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3002/menu/delete-menu-item/${id}`);
+      await axios.delete(`http://localhost:3001/menu/delete-menu-item/${id}`);
       setMenuData(menuData.filter((menuItem) => menuItem._id !== id));
     } catch (error) {
       console.error('There was an error deleting the menu item!', error);

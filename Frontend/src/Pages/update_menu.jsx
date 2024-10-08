@@ -22,7 +22,7 @@ const UpdateMenu = () => {
   useEffect(() => {
     const fetchMenuItem = async () => {
       try {
-        const response = await axios.get(`http://localhost:3002/menu/get-menu-item/${id}`);
+        const response = await axios.get(`http://localhost:3001/menu/get-menu-item/${id}`);
         const { menuItemId, menuItemName, category, price, preparationTime, servingSize, menuImage } = response.data;
         setMenuItemId(menuItemId);
         setMenuItemName(menuItemName);

@@ -91,7 +91,7 @@ const AddMenu = () => {
     };
 
     try {
-      await axios.post('http://localhost:3002/menu/add-menu-item', newMenuItem);
+      await axios.post('http://localhost:3001/menu/add-menu-item', newMenuItem);
       swal("Success", "New menu item added successfully!", "success");
       setMenuItemName('');
       setCategory('');

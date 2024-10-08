@@ -371,7 +371,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('http://localhost:3002/menu/get-menu-items'); // Replace with your API endpoint
+        const response = await fetch('http://localhost:3001/menu/get-menu-items'); // Replace with your API endpoint
         const data = await response.json();
         setMenuItems(data);
 

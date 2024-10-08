@@ -103,7 +103,7 @@ const MenuDashboard = () => {
   useEffect(() => {
     const fetchCategoryCounts = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/menu/category-counts');
+        const response = await axios.get('http://localhost:3001/menu/category-counts');
         const counts = response.data.reduce((acc, item) => {
           acc[item.category] = item.count;
           return acc;

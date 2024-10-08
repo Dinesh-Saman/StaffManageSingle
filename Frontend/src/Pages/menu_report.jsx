@@ -27,7 +27,7 @@ const MenuReportPage = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/menu/get-menu-items');
+        const response = await axios.get('http://localhost:3001/menu/get-menu-items');
         setMenuItems(response.data);
         setLoading(false);
       } catch (error) {
