@@ -76,6 +76,11 @@ const ViewAllLeaves = () => {
 
   // Create a map of staff IDs to names for quick lookup
   const staffMap = staffRecords.reduce((acc, staff) => {
+    acc[staff._id] = staff.staffId; // Assuming staffId is the unique identifier
+    return acc;
+  }, {});
+
+  const staffNameMap = staffRecords.reduce((acc, staff) => {
     acc[staff._id] = staff.name;
     return acc;
   }, {});
@@ -97,14 +102,26 @@ const ViewAllLeaves = () => {
 
   // Function to filter leave records based on search criteria
   const filteredLeaveRecords = leaveRecords.filter((record) => {
-    const staffName = staffMap[record.staffId] || 'Unknown Staff ID';
+    // Check if staffId exists in staffMap to avoid rendering unknown records
+    const staffId = staffMap[record.staffId];
+    const staffName = staffNameMap[record.staffId];
+
+    // Only include records with valid staff IDs and names
+    if (!staffId || !staffName) return false;
+
     switch (searchCriteria) {
+      case 'staffId':
+        return staffId.toLowerCase().includes(searchQuery.toLowerCase());
       case 'staffName':
         return staffName.toLowerCase().includes(searchQuery.toLowerCase());
       case 'status':
         return record.status.toLowerCase().includes(searchQuery.toLowerCase());
       case 'reason':
         return record.reason.toLowerCase().includes(searchQuery.toLowerCase());
+      case 'startDate':
+        return new Date(record.startDate).toLocaleDateString().includes(searchQuery);
+      case 'endDate':
+        return new Date(record.endDate).toLocaleDateString().includes(searchQuery);
       default:
         return true;
     }
@@ -147,15 +164,19 @@ const ViewAllLeaves = () => {
               onChange={(e) => setSearchCriteria(e.target.value)}
               style={{ width: '25%', marginLeft: '10px' }}
             >
+              <MenuItem value="staffId">Staff Id</MenuItem>
               <MenuItem value="staffName">Staff Name</MenuItem>
               <MenuItem value="status">Status</MenuItem>
               <MenuItem value="reason">Reason</MenuItem>
+              <MenuItem value="startDate">Start Date</MenuItem>
+              <MenuItem value="endDate">End Date</MenuItem>
             </Select>
           </Box>
           <TableContainer component={Paper} className={classes.tableContainer}>
             <Table>
               <TableHead>
                 <TableRow style={{ backgroundColor: '#d4ac0d', color: 'white' }}>
+                  <TableCell style={{ color: 'white' }}>Staff Id</TableCell>
                   <TableCell style={{ color: 'white' }}>Staff Name</TableCell>
                   <TableCell style={{ color: 'white' }}>Start Date</TableCell>
                   <TableCell style={{ color: 'white' }}>End Date</TableCell>
@@ -164,35 +185,42 @@ const ViewAllLeaves = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredLeaveRecords.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record) => (
-                  <TableRow key={record._id}>
-                    <TableCell>
-                      {staffMap[record.staffId] ? staffMap[record.staffId] : 'Unknown Staff ID'}
-                    </TableCell>
-                    <TableCell>{new Date(record.startDate).toLocaleDateString()}</TableCell>
-                    <TableCell>{new Date(record.endDate).toLocaleDateString()}</TableCell>
-                    <TableCell>{record.reason}</TableCell>
-                    <TableCell>
-                      <Select
-                        value={record.status}
-                        style={{
-                          fontWeight: 'bold',
-                          color: record.status === 'Pending' ? 'blue' : record.status === 'Approved' ? 'green' : 'red',
-                        }}
-                        onChange={(e) => handleStatusChange(record._id, e.target.value)}
-                      >
-                        <MenuItem value="Pending">Pending</MenuItem>
-                        <MenuItem value="Approved">Approved</MenuItem>
-                        <MenuItem value="Rejected">Rejected</MenuItem>
-                      </Select>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {filteredLeaveRecords.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record) => {
+                  const staffId = staffMap[record.staffId];
+                  const staffName = staffNameMap[record.staffId];
+
+                  // Only render if staffId and staffName exist
+                  if (!staffId || !staffName) return null;
+
+                  return (
+                    <TableRow key={record._id}>
+                      <TableCell>{staffId}</TableCell>
+                      <TableCell>{staffName}</TableCell>
+                      <TableCell>{new Date(record.startDate).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(record.endDate).toLocaleDateString()}</TableCell>
+                      <TableCell>{record.reason}</TableCell>
+                      <TableCell>
+                        <Select
+                          value={record.status}
+                          style={{
+                            fontWeight: 'bold',
+                            color: record.status === 'Pending' ? 'blue' : record.status === 'Approved' ? 'green' : 'red',
+                          }}
+                          onChange={(e) => handleStatusChange(record._id, e.target.value)}
+                        >
+                          <MenuItem value="Pending">Pending</MenuItem>
+                          <MenuItem value="Approved">Approved</MenuItem>
+                          <MenuItem value="Rejected">Rejected</MenuItem>
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[8]}
+            rowsPerPageOptions={[8, 16, 24]}
             component="div"
             count={filteredLeaveRecords.length}
             rowsPerPage={rowsPerPage}
@@ -202,7 +230,7 @@ const ViewAllLeaves = () => {
           />
         </Box>
       </Box>
-      <Footer></Footer>
+      <Footer />
     </Box>
   );
 };

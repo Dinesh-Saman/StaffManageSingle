@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaTachometerAlt, FaUsers, FaPlusSquare, FaChartBar, FaSignOutAlt, FaHome, FaUtensils, FaCaretDown, FaCaretUp } from 'react-icons/fa';
+import {
+  FaTachometerAlt,
+  FaUsers,
+  FaChartBar,
+  FaSignOutAlt,
+  FaHome,
+  FaUserPlus,
+  FaClipboardList,
+  FaClipboardCheck,
+  FaFileAlt,
+  FaCaretDown,
+  FaCaretUp
+} from 'react-icons/fa';
 import logo from '../Images/logo.png'; // Adjust the path if needed
 
 // Styled components
 const SidebarContainer = styled.div`
   width: 220px;
-  height: 200vh;
+  height: 190vh;
   background: linear-gradient(135deg, #00bcd4, #ff5722); /* Gradient background */
   padding: 20px;
   flex-direction: column;
@@ -88,6 +100,12 @@ const Sidebar = () => {
                 Dashboard
               </MenuItem>
             </Link>
+            <Link to="/register" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem>
+                <Icon><FaUserPlus /></Icon>
+                Register Staff
+              </MenuItem>
+            </Link>
             <Link to="/view-staff" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
                 <Icon><FaUsers /></Icon>
@@ -96,31 +114,31 @@ const Sidebar = () => {
             </Link>
             <Link to="/all-attendance" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
-                <Icon><FaChartBar /></Icon>
+                <Icon><FaClipboardList /></Icon>
                 View Attendances
               </MenuItem>
             </Link>
             <Link to="/view-leaves" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
-                <Icon><FaChartBar /></Icon>
+                <Icon><FaClipboardCheck /></Icon>
                 View Leaves
               </MenuItem>
             </Link>
             <Link to="/staff-report" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
-                <Icon><FaChartBar /></Icon>
+                <Icon><FaFileAlt /></Icon>
                 Staff Report
               </MenuItem>
             </Link>
             <Link to="/attendance-report" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
-                <Icon><FaChartBar /></Icon>
+                <Icon><FaFileAlt /></Icon>
                 Attendance Report
               </MenuItem>
             </Link>
             <Link to="/leave-report" style={{ textDecoration: 'none', color: 'inherit' }}>
               <MenuItem>
-                <Icon><FaChartBar /></Icon>
+                <Icon><FaFileAlt /></Icon>
                 Leave Report
               </MenuItem>
             </Link>
@@ -130,13 +148,13 @@ const Sidebar = () => {
 
 
       {/* Home and Sign Out */}
-      <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         <MenuItem>
           <Icon><FaHome /></Icon>
           Home
         </MenuItem>
       </Link>
-      <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         <MenuItem>
           <Icon><FaSignOutAlt /></Icon>
           Sign Out

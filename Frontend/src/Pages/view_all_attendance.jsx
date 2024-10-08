@@ -52,7 +52,7 @@ const ViewAllAttendance = () => {
     try {
       const response = await axios.get('http://localhost:3001/attendance');
       setAttendanceRecords(response.data);
-      setFilteredRecords(response.data);
+      setFilteredRecords(response.data.filter(record => record.staffId)); // Filter out records with unknown staff IDs
     } catch (error) {
       console.error(error);
       swal("Error", "Failed to load attendance records.", "error");
@@ -65,9 +65,10 @@ const ViewAllAttendance = () => {
 
   const handleSearch = () => {
     const searchResults = attendanceRecords.filter((record) => {
+      if (!record.staffId) return false; // Skip records without staffId
       switch (searchCriteria) {
         case 'staffName':
-          return record.staffId && record.staffId.name.toLowerCase().includes(searchTerm.toLowerCase());
+          return record.staffId.name.toLowerCase().includes(searchTerm.toLowerCase());
         case 'status':
           return record.status.toLowerCase().includes(searchTerm.toLowerCase());
         case 'date':
@@ -134,10 +135,8 @@ const ViewAllAttendance = () => {
               <TableBody>
                 {filteredRecords.map((record) => (
                   <TableRow key={record._id}>
-                    <TableCell>{record.staffId ? record.staffId._id.substring(0,5) : 'Unknown Staff ID'}</TableCell>
-                    <TableCell>
-                      {record.staffId ? record.staffId.name : 'Unknown Staff ID'}
-                    </TableCell>
+                    <TableCell>{record.staffId.staffId.substring(0,5)}</TableCell>
+                    <TableCell>{record.staffId.name}</TableCell>
                     <TableCell>{record.status}</TableCell>
                     <TableCell>{new Date(record.date).toLocaleDateString()}</TableCell>
                   </TableRow>
@@ -147,7 +146,7 @@ const ViewAllAttendance = () => {
           </TableContainer>
         </Box>
       </Box>
-      <Footer></Footer>
+      <Footer />
     </Box>
   );
 };

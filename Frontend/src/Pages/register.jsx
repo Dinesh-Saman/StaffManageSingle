@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, MenuItem, FormControl, Select, InputLabel, Box, Typography } from '@material-ui/core';
 import axios from 'axios';
 import swal from 'sweetalert';
@@ -6,6 +6,7 @@ import Header from '../Components/customer_header';
 import Footer from '../Components/customer_footer';
 import RegisterImg from '../Images/register.jpg'
 import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from '../Components/sidebar';
 
 const Register = () => {
   const [position, setPosition] = useState('');
@@ -86,6 +87,18 @@ const Register = () => {
     return newErrors;
   };
 
+  const generateStaffId = () => {
+    const randomId = Math.floor(1000 + Math.random() * 9000); // Generates a random 4-digit number
+    return `STF${randomId}`; // Format: STFXXXX
+};
+
+
+useEffect(() => {
+  const newStaffId = generateStaffId();
+  setStaffId(newStaffId);
+}, []);
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const newErrors = validateFields();
@@ -108,10 +121,7 @@ const Register = () => {
 
     try {
       await axios.post('http://localhost:3001/staff/add-staff', newUser);
-      swal("Success", "Registration successful!", "success")
-      .then(() => {
-        navigate("/login");
-      });    
+      swal("Success", "Registration successful!", "success") ; 
     } catch (error) {
       console.error(error);
       swal("Error", "Something went wrong. Please try again.", "error");
@@ -119,39 +129,38 @@ const Register = () => {
   };
 
   return (
-    <div style={{backgroundColor:'#2E4857'}}>
+    <div>
       <Header />
       <Box
         display="flex"
-        flexDirection="column"
-        alignItems="center"
+        flexDirection="row"
         justifyContent="center"
+        alignItems="flex-start" 
+
         style={{
-          marginTop: '40px',
-          marginBottom: '40px',
           height: 'auto',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
-          backgroundImage: 'url("https://cf.bstatic.com/xdata/images/hotel/max1024x768/154724104.jpg?k=0a6828e20e694f3b73f1dada7375632cd2fd394b2a4882337186e66495a2c891&o=&hp=1")', // Add the path to your background image here
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
         }}
       >
+        <Sidebar />
         <Box
           display="flex"
           flexDirection="row"  // Change flex direction to row
           alignItems="center"
           justifyContent="center"
           style={{
+            flex: 1,
             backgroundColor: 'white',
             borderRadius: 8,
             boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
             padding: '40px',
             width: '100%',
             maxWidth: '1200px',  // Adjust max width to accommodate image
-            marginTop: '20px',
-            marginBottom:'20px'
+            marginBottom:'60px',
+            marginLeft:'20px',
+            marginRight:'20px',
+            marginTop:'20px'
           }}
         >
           {/* Form Section */}
@@ -174,19 +183,18 @@ const Register = () => {
             </Typography>
 
             <Box component="form" width="100%" noValidate autoComplete="off" onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                margin="normal"
-                label="Staff Member ID"
-                variant="outlined"
-                value={staffId}
-                onChange={(e) => {
-                  setStaffId(e.target.value);
-                  setErrors((prevErrors) => ({ ...prevErrors, staffId: '' }));
-                }}
-                error={!!errors.staffId}
-                helperText={errors.staffId}
-              />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Staff ID"
+              variant="outlined"
+              value={staffId}
+              InputProps={{
+                  readOnly: true,
+              }}
+              disabled
+          />
+
               <TextField
                 fullWidth
                 margin="normal"
@@ -320,15 +328,23 @@ const Register = () => {
 
           {/* Image Section */}
           <Box
-            width="100%" 
+            width="160%" 
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
             <img
               src={RegisterImg}
-              alt="Registration"
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+              alt="Register"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '120%',
+                objectFit: 'cover',
+                position: 'absolute', // Position the image absolutely within the container
+                top: '38%',
+                left: '60%',
+                
+              }}
             />
           </Box>
         </Box>

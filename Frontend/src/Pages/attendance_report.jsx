@@ -196,14 +196,14 @@ const AttendanceReportPage = () => {
             </Typography>
           </Box>
           <Box mt={4}>
-            <Button variant="contained" color="secondary" onClick={handleDownload}>
+            <Button variant="contained" color="secondary" onClick={handleDownload} style={{marginBottom:'10px'}}>
               Download PDF
             </Button>
           </Box>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow>
+                <TableRow style={{backgroundColor:'orange'}}>
                   <TableCell><strong>Employee ID</strong></TableCell>
                   <TableCell><strong>Employee Name</strong></TableCell>
                   <TableCell><strong>Status</strong></TableCell>

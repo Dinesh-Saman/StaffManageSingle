@@ -51,9 +51,14 @@ const LeaveReportPage = () => {
     setLoading(false);
   }, []);
 
-  // Create staff map after fetching records
+  // Create staff maps after fetching records
   const staffMap = staffRecords.reduce((acc, staff) => {
     acc[staff._id] = staff.name;
+    return acc;
+  }, {});
+
+  const staffIdMap = staffRecords.reduce((acc, staff) => {
+    acc[staff._id] = staff.staffId;
     return acc;
   }, {});
 
@@ -97,14 +102,16 @@ const LeaveReportPage = () => {
 
     // Prepare table data
     const tableColumn = ['Employee ID', 'Employee Name', 'Start Date', 'End Date', 'Reason', 'Status'];
-    const tableRows = leaveRecords.map(record => [
-      record.staffId.substring(0,5),
-      staffMap[record.staffId] || 'Unknown', // Ensure correct mapping
-      record.startDate.substring(0,10),
-      record.endDate.substring(0,10),
-      record.reason,
-      record.status
-    ]);
+    const tableRows = leaveRecords
+      .filter(record => staffMap[record.staffId] && staffIdMap[record.staffId])  // Filter out "Unknown" records
+      .map(record => [
+        staffIdMap[record.staffId],
+        staffMap[record.staffId],
+        record.startDate.substring(0,10),
+        record.endDate.substring(0,10),
+        record.reason,
+        record.status
+      ]);
 
     doc.autoTable({
       startY: addressY + 22,
@@ -194,14 +201,14 @@ const LeaveReportPage = () => {
             </Typography>
           </Box>
           <Box mt={4}>
-            <Button variant="contained" color="secondary" onClick={handleDownload}>
+            <Button variant="contained" color="secondary" onClick={handleDownload} style={{marginBottom:'10px'}}>
               Download PDF
             </Button>
           </Box>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow>
+                <TableRow style={{backgroundColor:'orange'}}>
                   <TableCell><strong>Employee ID</strong></TableCell>
                   <TableCell><strong>Employee Name</strong></TableCell>
                   <TableCell><strong>Start Date</strong></TableCell>
@@ -211,24 +218,27 @@ const LeaveReportPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {leaveRecords.map((record) => (
-                  <TableRow key={record.staffId}>
-                    <TableCell>{record.staffId.substring(0, 5)}</TableCell>
-                    <TableCell>{staffMap[record.staffId] || 'Unknown'}</TableCell>
-                    <TableCell>{record.startDate.substring(0, 10)}</TableCell>
-                    <TableCell>{record.endDate.substring(0, 10)}</TableCell>
-                    <TableCell>{record.reason}</TableCell>
-                    <TableCell>{record.status}</TableCell>
-                  </TableRow>
+                {leaveRecords
+                  .filter(record => staffMap[record.staffId] && staffIdMap[record.staffId]) // Filter out "Unknown" records
+                  .map((record) => (
+                    <TableRow key={record.staffId}>
+                      <TableCell>{staffIdMap[record.staffId]}</TableCell>
+                      <TableCell>{staffMap[record.staffId]}</TableCell>
+                      <TableCell>{record.startDate.substring(0, 10)}</TableCell>
+                      <TableCell>{record.endDate.substring(0, 10)}</TableCell>
+                      <TableCell>{record.reason}</TableCell>
+                      <TableCell>{record.status}</TableCell>
+                    </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
       </Box>
-      <Footer></Footer>
+      <Footer />
     </Box>
   );
 };
 
 export default LeaveReportPage;
+
